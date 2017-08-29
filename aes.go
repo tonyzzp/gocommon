@@ -11,7 +11,7 @@ type AES struct {
 	block cipher.Block
 }
 
-func (a *AES) init(key, iv []byte) {
+func (a *AES) Init(key, iv []byte) {
 	a.iv = iv
 	b, e := aes.NewCipher(key)
 	if e != nil {
@@ -26,7 +26,7 @@ func (a *AES) check() {
 	}
 }
 
-func (a *AES) encrypt(data []byte) []byte {
+func (a *AES) Encrypt(data []byte) []byte {
 	a.check()
 	mode := cipher.NewCBCEncrypter(a.block, a.iv)
 	data = padding(data, mode.BlockSize())
@@ -35,7 +35,7 @@ func (a *AES) encrypt(data []byte) []byte {
 	return result
 }
 
-func (a *AES) decrypt(data []byte) []byte {
+func (a *AES) Decrypt(data []byte) []byte {
 	a.check()
 	mode := cipher.NewCBCDecrypter(a.block, a.iv)
 	result := make([]byte, len(data))

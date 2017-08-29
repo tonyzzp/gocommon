@@ -5,6 +5,7 @@ import (
 	"crypto/cipher"
 )
 
+//DES加解密
 type DES struct {
 	iv    [8]byte
 	block cipher.Block
@@ -16,7 +17,7 @@ func (a *DES) check() {
 	}
 }
 
-func (d *DES) init(key, iv [8]byte) {
+func (d *DES) Init(key, iv [8]byte) {
 	d.iv = iv
 	block, e := des.NewCipher(key[:])
 	if e != nil {
@@ -25,7 +26,7 @@ func (d *DES) init(key, iv [8]byte) {
 	d.block = block
 }
 
-func (d *DES) encrypt(data []byte) []byte {
+func (d *DES) Encrypt(data []byte) []byte {
 	d.check()
 	mode := cipher.NewCBCEncrypter(d.block, d.iv[:])
 	data = padding(data, mode.BlockSize())
@@ -34,7 +35,7 @@ func (d *DES) encrypt(data []byte) []byte {
 	return result
 }
 
-func (d *DES) decrypt(data []byte) []byte {
+func (d *DES) Decrypt(data []byte) []byte {
 	d.check()
 	mode := cipher.NewCBCDecrypter(d.block, d.iv[:])
 	result := make([]byte, len(data))
