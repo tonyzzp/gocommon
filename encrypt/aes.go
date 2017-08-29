@@ -1,4 +1,4 @@
-package gocommon
+package encrypt
 
 import (
 	"crypto/cipher"
