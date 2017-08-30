@@ -1,10 +1,12 @@
 package encrypt
 
-import "bytes"
+import (
+	"github.com/tonyzzp/gocommon/bytesutil"
+)
 
 func padding(data []byte, blockSize int) []byte {
 	l := blockSize - len(data)%blockSize
-	p := bytes.Repeat([]byte{byte(l)}, l)
+	p := bytesutil.Repeat(l, l)
 	data = append(data, p...)
 	return data
 }
