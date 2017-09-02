@@ -44,7 +44,7 @@ func (a *AES) check() {
 	}
 }
 
-//传入需要加解密的数据，返回块加解密结果。如果不够一块的大小，则会回返nil
+// 传入需要加解密的数据，返回块加解密结果。如果不够一块的大小，则会回返nil
 func (a *AES) Update(data []byte) []byte {
 	a.check()
 	bs := a.block.BlockSize()
@@ -62,7 +62,7 @@ func (a *AES) Update(data []byte) []byte {
 	}
 }
 
-//返回最后一块加解密的结果。此方法必须要调用
+// 返回最后一块加解密的结果。如果使用过Update方法，则此方法必须要调用
 func (a *AES) Dofinal() []byte {
 	a.check()
 	bs := a.block.BlockSize()
@@ -76,5 +76,22 @@ func (a *AES) Dofinal() []byte {
 	if a.cipherMode == Mode_Decrypt {
 		result = unpadding(result)
 	}
+	return result
+}
+
+// 一次性传入所有数据，进行解密或加密。
+// 会清空Update传入的所有剩余数据
+func (a *AES) DoAll(data []byte) []byte {
+	a.check()
+	bs := a.block.BlockSize()
+	if a.cipherMode == Mode_Encrypt {
+		data = padding(data, bs)
+	}
+	result := make([]byte, len(data))
+	a.mode.CryptBlocks(result, data)
+	if a.cipherMode == Mode_Decrypt {
+		result = unpadding(result)
+	}
+	a.data = nil
 	return result
 }
