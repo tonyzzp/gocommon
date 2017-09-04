@@ -8,7 +8,7 @@ func Repeat(value int, times int) []byte {
 	return bytes.Repeat([]byte{byte(value)}, times)
 }
 
-func BytesToInt32(b [4]byte) int32 {
+func BytesToInt32(b []byte) int32 {
 	i := int32(int32(b[0])<<24 | int32(b[1])<<16 | int32(b[2])<<8 | int32(b[3]))
 	return i
 }
